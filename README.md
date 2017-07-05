@@ -67,7 +67,7 @@ your MePOS unit.
 - [Contact](#contact)
 
 
-## Supported tablet devices
+## Supported devices
 The MePOS connect library supports Android tablets and Windows PC’s via a USB and Wi-Fi connection. Due to the
 restrictions of the iOS platform it is possible to connect to the MePOS unit via Wi-Fi only from an Apple device.
 
@@ -125,19 +125,19 @@ Enables the USB ports on the MePOS device.
 
 Disables the USB ports on the MePOS device.
 
-### async Task<int> cashDrawerStatus()
+### async Task&lt;int&gt; cashDrawerStatus()
 
 Reads the status of the cash drawer. Possible return data are: `MePOS.CASH_DRAWER_STATUS_OPENED` or `MePOS.CASH_DRAWER_STATUS_CLOSED`.
 
-### async Task<bool> openCashDrawer()
+### async Task&lt;bool&gt; openCashDrawer()
 
 Opens the cash drawer but validating if it's opened before. Returns true if the relay was activated, false if the cash drawer was already opened. Same as `openCashDrawer(true)`.
 
-### async Task<bool> openCashDrawer(bool validateCashDrawerStatus)
+### async Task&lt;bool&gt; openCashDrawer(bool validateCashDrawerStatus)
 
 Opens the cash drawer, enabling the user to not verify if the cash drawer is already opened.
 
-### async Task<bool> setDiagnosticLed(int position, int colour)
+### async Task&lt;bool&gt; setDiagnosticLed(int position, int colour)
 
 Sets the diagnostic led indicated with the color. The possible values for the position value are indicated in the `MePOSDiagnosticLEDs` class:
 
@@ -160,7 +160,7 @@ The value of the color is defined in the `MePOSColorCodes` class:
 	public const int LED_AMBER = 3;
 ```
 
-### async Task<bool> setCosmeticLedCol(int colour)
+### async Task&lt;bool&gt; setCosmeticLedCol(int colour)
 
 Sets the cosmetic led indicated with the next available colors in the `MePOSColorCodes` class:
 
@@ -193,15 +193,15 @@ If you need to be aware of the events such as starting to print, completed print
 
 Same as `print(receipt, null)`
 
-### async Task<int> printRAW(String rawData)
+### async Task&lt;int&gt; printRAW(String rawData)
 
 Sends a raw data to print. Useful if you have your own POS implementation
 
-### Task<bool> serialRAW(String rawData)
+### Task&lt;bool&gt; serialRAW(String rawData)
 
 Sends a raw data to the DE9 port.
 
-### async Task<bool> printerBusy()
+### async Task&lt;bool&gt; printerBusy()
 
 Asks to the MePOS if the printer is busy.
 
@@ -209,15 +209,15 @@ Asks to the MePOS if the printer is busy.
 
 Prints the configuration page of the thermal printer.
 
-### async Task<String> getFWVersion()
+### async Task&lt;String&gt; getFWVersion()
 
 Returns the firmware version of the MePOS
 
-### async Task<String> getSerialNumber()
+### async Task&lt;String&gt; getSerialNumber()
 
 Returns the board serial number of the MePOS
 
-### async Task<bool> isMePOSConnected()
+### async Task&lt;bool&gt; isMePOSConnected()
 
 Returns true if a MePOS is found over USB in case of a MePOS USB instance, or True if MePOS was found over tcp/ip. False otherwise.
 
@@ -244,7 +244,7 @@ Sets the IP address on which the connection manager will look for a MePOS unit. 
 
 Gets the current IP address setting for the connection manager.
 
-### Task<String> MePOSGetAssignedIP()
+### Task&lt;String&gt; MePOSGetAssignedIP()
 
 Gets the current IP address from the connected MePOS unit. When connected to Wi-Fi this will be either the statically provided IP address or the DHCP network assigned IP address. In access point mode this will be the default IP address of 192.168.16.254.
 
@@ -311,15 +311,15 @@ Password - The password for the network you are creating. This can be left blank
 
 Same as `MePOSSetAccessPoint(String SSID, String encryption, String password)` but enables callback for notification progress.
 
-### Task<String> getMACAddress()
+### Task&lt;String&gt; getMACAddress()
 
 Asks for the MAC address of the MePOS network unit.
 
-### Task<String> getSSID();
+### Task&lt;String&gt; getSSID();
 
 Returns the SSID the MePOS is broadcasting
 
-### Task<String> getRouterFirmware();
+### Task&lt;String&gt; getRouterFirmware();
 
 Returns the firmware version of the MePOS network unit.
 
