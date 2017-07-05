@@ -20,26 +20,26 @@ your MePOS unit.
     - [void disableWifi()](#void-disablewifi)
     - [void enableUSB()](#void-enableusb)
     - [void disableUSB()](#void-disableusb)
-    - [async Task<int> cashDrawerStatus()](#async-taskint-cashdrawerstatus)
-    - [async Task<bool> openCashDrawer()](#async-taskboolbool-opencashdrawer)
-    - [async Task<bool> openCashDrawer(bool validateCashDrawerStatus)](#async-taskbool-opencashdrawerbool-validatecashdrawerstatus)
-    - [async Task<bool> setDiagnosticLed(int position, int colour)](#async-taskbool-setdiagnosticledint-position-int-colour)
-    - [async Task<bool> setCosmeticLedCol(int colour)](#async-taskbool-setcosmeticledcolint-colour)
+    - [async Task&lt;int&gt; cashDrawerStatus()](#async-taskint-cashdrawerstatus)
+    - [async Task&lt;bool&gt; openCashDrawer()](#async-taskboolbool-opencashdrawer)
+    - [async Task&lt;bool&gt; openCashDrawer(bool validateCashDrawerStatus)](#async-taskbool-opencashdrawerbool-validatecashdrawerstatus)
+    - [async Task&lt;bool&gt; setDiagnosticLed(int position, int colour)](#async-taskbool-setdiagnosticledint-position-int-colour)
+    - [async Task&lt;bool&gt; setCosmeticLedCol(int colour)](#async-taskbool-setcosmeticledcolint-colour)
     - [int print(MePOSReceipt receipt, MePOSPrinterCallback callback)](#int-printmeposreceipt-receipt-meposprintercallback-callback)
     - [int print(MePOSReceipt receipt)](#int-printmeposreceipt-receipt)
-    - [async Task<int> printRAW(String rawData)](#async-taskint-printrawstring-rawdata)
-    - [async Task<int> serialRAW(String rawData)](#async-taskint-serialrawstring-rawdata)
-    - [async Task<bool> printerBusy()](#async-taskbool-printerbusy)
+    - [async Task&lt;int&gt; printRAW(String rawData)](#async-taskint-printrawstring-rawdata)
+    - [async Task&lt;int&gt; serialRAW(String rawData)](#async-taskint-serialrawstring-rawdata)
+    - [async Task&lt;bool&gt; printerBusy()](#async-taskbool-printerbusy)
     - [async Task printConfigPage()](#async-task-printconfigpage)
-    - [async Task<String> getFWVersion()](#async-taskstring-getfwversion)
-    - [async Task<String> getSerialNumber()](#async-taskstring-getserialnumber)
-	- [async Task<bool> isMePOSConnected()](#async-taskbool-ismeposconnected)
+    - [async Task&lt;String&gt; getFWVersion()](#async-taskstring-getfwversion)
+    - [async Task&lt;String&gt; getSerialNumber()](#async-taskstring-getserialnumber)
+    - [async Task&lt;bool&gt; isMePOSConnected()](#async-taskbool-ismeposconnected)
     - [MePOSConnectionManager getConnectionManager()](#meposconnectionmanager-getconnectionmanager)
 - [MePOSConnectionManager](#meposconnectionmanager)
     - [int getConnectionStatus()](#int-getconnectionstatus)
     - [void setConnectionIPAddress(string IPAddress)](#void-setconnectionipaddressstring-ipaddress)
     - [String getConnectionIPAddress()](#string-getconnectionipaddress)
-    - [Task<String> MePOSGetAssignedIP()](#taskstring-meposgetassignedip)
+    - [Task&lt;String&gt; MePOSGetAssignedIP()](#taskstring-meposgetassignedip)
     - [bool MePOSConnectDefault()](#bool-meposconnectdefault)
     - [bool MePOSConnectDefault(MePOSConfigurationCallback callback)](#bool-meposconnectdefaultmeposconfigurationcallback-callback)
     - [bool MePOSConnectEthernet(String IPAddress, String netmask)](#bool-meposconnectethernetstring-ipaddress-string-netmask)
@@ -50,9 +50,9 @@ your MePOS unit.
     - [bool MePOSConnectWiFi(String ssid, String ipAddress, String netmask, String encryption, String password, MePOSConfigurationCallback callback)](#bool-meposconnectwifistring-ssid-string-ipaddress-string-netmask-string-encryption-string-password-meposconfigurationcallback-callback)
     - [bool MePOSSetAccessPoint(String SSID, String encryption, String password)](#bool-mepossetaccesspointstring-ssid-string-encryption-string-password)
     - [bool MePOSSetAccessPoint(String ssid, String encryption, String password, MePOSConfigurationCallback callback)](#bool-mepossetaccesspointstring-ssid-string-encryption-string-password-meposconfigurationcallback-callback)
-    - [Task<String> getMACAddress()](#taskstring-getmacaddress)
-    - [Task<String> getSSID()](#taskstring-getssid)
-    - [Task<String> getRouterFirmware()](#taskstring-getrouterfirmware)
+    - [Task&lt;String&gt; getMACAddress()](#taskstring-getmacaddress)
+    - [Task&lt;String&gt; getSSID()](#taskstring-getssid)
+    - [Task&lt;String&gt; getRouterFirmware()](#taskstring-getrouterfirmware)
 - [MePOSReceipt](#meposreceipt)
     - [setCutType(int cutType)](#setcuttypeint-cuttype)
     - [MePOSReceiptBarcodeLine(int type, String data)](#meposreceiptbarcodelineint-type-string-data)
@@ -98,7 +98,7 @@ If the library has been referenced correctly in your development environment, yo
 
 To instantiate a new class to communicate with the MePOS unit you will need to add the following code to your application:
 
-```
+```csharp
 MePOS mePOS = await MePOS.getInstance(MePOSConnectionType.USB);
 ```
 
@@ -183,7 +183,7 @@ The below example prints a single line receipt:
 
 ```csharp
 	MePOSReceipt r = new MePOSReceipt();
-	r.addLine(new MePOSReceiptTextLine(“Hello World”, MePOS.TEXT_STYLE_BOLD, MePOS.TEXT_SIZE_WIDE, MePOS.TEXT_POSITION_CENTER));
+	r.addLine(new MePOSReceiptTextLine("Hello World", MePOS.TEXT_STYLE_BOLD, MePOS.TEXT_SIZE_WIDE, MePOS.TEXT_POSITION_CENTER));
 	int success = mePOS.print(r);
 ```
 
@@ -356,7 +356,7 @@ The following example shows how to add a barcode to a receipt:
 
 ```csharp
 	MePOSReceipt r = new MePOSReceipt();
-	r.AddLine(new MePOSReceiptBarcodeLine(MePOS.BARCODE_TYPE_PDF417, “Hello World!”);
+	r.AddLine(new MePOSReceiptBarcodeLine(MePOS.BARCODE_TYPE_PDF417, "Hello World!");
 ```
 
 ### MePOSReceiptFeedLine(int lines)
@@ -389,7 +389,7 @@ The following example shows how to add a price line to a receipt:
 
 ```csharp
 	MePOSReceipt r = new MePOSReceipt();
-	r.AddLine(new MePOSReceiptPriceLine(“Some Item”, MePOS.TEXT_STYLE_NONE, “Some Price”, MePOS.TEXT_STYLE_NONE);
+	r.AddLine(new MePOSReceiptPriceLine("Some Item", MePOS.TEXT_STYLE_NONE, "Some Price", MePOS.TEXT_STYLE_NONE);
 ```
 
 ### MePOSReceiptSingleCharLine(char chr)
@@ -400,7 +400,7 @@ The following example shows how to add a single character to a receipt:
 
 ```csharp
 	MePOSReceipt r = new MePOSReceipt();
-	r.AddLine(new MePOSReceiptSingleCharLine(‘.’);
+	r.AddLine(new MePOSReceiptSingleCharLine('.');
 ```
 
 ## MePOSReceiptTextLine(String text, int style, int size, int position)
@@ -412,7 +412,7 @@ The following example shows how to add a text line to a receipt:
 
 ```csharp
 	MePOSReceipt r = new MePOSReceipt();
-	r.AddLine(new MePOSReceiptTextLine(“Hello World!”,
+	r.AddLine(new MePOSReceiptTextLine("Hello World!",
 	MePOS.TEXT_STYLE_NONE, MePOS.TEXT_SIZE_NORMAL,
 	MePOS.TEXT_POSITION_CENTER);
 ```
