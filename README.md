@@ -1,4 +1,4 @@
-# MePOS Connect windows UWP SDK Guide V1.0.1
+# MePOS Connect windows UWP SDK Guide V1.1.0
 
 The MePOS connect for Windows UWP SDK is designed to allow communication from a tablet or Windows computer to the MePOS host
 unit. SDK libraries are currently available for iOS, Android and .Net Framework.
@@ -38,6 +38,7 @@ your MePOS unit.
 - [MePOSConnectionManager](#meposconnectionmanager)
     - [int getConnectionStatus()](#int-getconnectionstatus)
     - [void setConnectionIPAddress(string IPAddress)](#void-setconnectionipaddressstring-ipaddress)
+    - [void setConnectionPort(int port)](#void-setconnectionportint-port)
     - [String getConnectionIPAddress()](#string-getconnectionipaddress)
     - [Task&lt;String&gt; MePOSGetAssignedIP()](#taskstring-meposgetassignedip)
     - [bool MePOSConnectDefault()](#bool-meposconnectdefault)
@@ -55,15 +56,19 @@ your MePOS unit.
     - [Task&lt;String&gt; getRouterFirmware()](#taskstring-getrouterfirmware)
 - [MePOSReceipt](#meposreceipt)
     - [setCutType(int cutType)](#setcuttypeint-cuttype)
-    - [MePOSReceiptBarcodeLine(int type, String data)](#meposreceiptbarcodelineint-type-string-data)
-    - [MePOSReceiptFeedLine(int lines)](#meposreceiptfeedlineint-lines)
-    - [MePOSReceiptImageLine(StorageFile imageFile)](#meposreceiptimagelinestoragefile-imagefile)
-    - [MePOSReceiptPriceLine(String leftText, int leftStyle, String rightText, int rightStyle)](#meposreceiptpricelinestring-lefttext-int-leftstyle-string-righttext-int-rightstyle)
-    - [MePOSReceiptSingleCharLine(char chr)](#meposreceiptsinglecharlinechar-chr)
-    - [MePOSReceiptTextLine(String text, int style, int size, int position)](#meposreceipttextlinestring-text-int-style-int-size-int-position)
-- [Text style constants](#text-style-constants)
-- [Text size constants](#text-size-constants)
-- [Text position constants](#text-position-constants)
+    - [setHeaderFeed(int headerFeed)](#setheaderfeedint-headerfeed)
+    - [setFooterFeed(int footerFeed)](#setfooterfeedint-footerfeed)
+    - [setfeedaftercut(int feedLines)](#setfeedaftercutint-feedlines)
+- [MePOSReceiptBarcodeLine(int type, String data)](#meposreceiptbarcodelineint-type-string-data)
+- [MePOSReceiptFeedLine(int lines)](#meposreceiptfeedlineint-lines)
+- [MePOSReceiptImageLine(StorageFile imageFile)](#meposreceiptimagelinestoragefile-imagefile)
+- [MePOSReceiptPriceLine(String leftText, int leftStyle, String rightText, int rightStyle)](#meposreceiptpricelinestring-lefttext-int-leftstyle-string-righttext-int-rightstyle)
+- [MePOSReceiptSingleCharLine(char chr)](#meposreceiptsinglecharlinechar-chr)
+- [MePOSReceiptTextLine(String text, int style, int size, int position)](#meposreceipttextlinestring-text-int-style-int-size-int-position)
+- [Text constants](#text-constants)
+    - [Text style constants](#text-style-constants)
+    - [Text size constants](#text-size-constants)
+    - [Text position constants](#text-position-constants)
 - [MePOS PRO Emulator](#mepos-pro-emulator)
 - [Contact](#contact)
 
@@ -78,14 +83,14 @@ The MePOS connect SDK has been tested with the latest MePOS 3.1 firmware.
 ## Use of the MePOS connect SDK on Windows
 **Version**
 
-The current UWP Windows library version is 1.0.1 Details of the latest changes are in the release notes bundled with
+The current UWP Windows library version is 1.1.0 Details of the latest changes are in the release notes bundled with
 the Windows SDK.
 
 ## Libraries
 The MePOS connect SDK for Windows currently includes one library.
 - com.uniquesecure.meposconnect.dll
 
-The MePOS connect library is provided for Windows for use with in yout UWP App using Microsoft Visual studio.
+The MePOS connect library is provided for Windows for use with in your UWP App using Microsoft Visual studio.
 The MePOS connect library for windows is built using the Microsoft .NETCore Universal Windows Platform and the minimum target is 10.0 (Build 10240).
 
 ## References
@@ -100,10 +105,11 @@ If the library has been referenced correctly in your development environment, yo
 To instantiate a new class to communicate with the MePOS unit you will need to add the following code to your application:
 
 ```csharp
-MePOS mePOS = await MePOS.getInstance(MePOSConnectionType.USB);
+	MePOS mePOS = await MePOS.getInstance(MePOSConnectionType.USB);
 ```
 
-The above code has now instantiated a MePOS object to communicate via USB.
+The above code has now instantiated a MePOS object to communicate via **USB**.
+You can also instantiate a **WIFI** (TCP/IP) instance, or connect to a generic EPOS-based printer. Note that normally you'll want to override the tcp port number to **9100**. Please check this port with your EPOS printer documentation.
 
 ## MePOS SDK Methods
 Once a MePOS object has been created there are several methods that can be executed that perform actions on the MePOS unit. The method names, syntax and usage are almost identical across the Windows and Android platform.
@@ -112,23 +118,24 @@ The MePOS methods will return true if successful or false if there is no connect
 
 ### void enableWifi()
 
-Enables the Wifi module on the MePOS device.
+Enables the Wifi module on the MePOS device. This method is only available for **USB** and **WIFI** instances.
 
 ### void disableWifi()
 
-Disables the Wifi module on the MePOS device.
+Disables the Wifi module on the MePOS device. This method is only available for **USB** and **WIFI** instances.
 
 ### void enableUSB()
 
-Enables the USB ports on the MePOS device.
+Enables the USB ports on the MePOS device. This method is only available for **USB** and **WIFI** instances.
 
 ### void disableUSB()
 
-Disables the USB ports on the MePOS device.
+Disables the USB ports on the MePOS device. This method is only available for **USB** and **WIFI** instances.
 
 ### async Task&lt;int&gt; cashDrawerStatus()
 
 Reads the status of the cash drawer. Possible return data are: `MePOS.CASH_DRAWER_STATUS_OPENED` or `MePOS.CASH_DRAWER_STATUS_CLOSED`.
+This method is only available for **USB** and **WIFI** instances.
 
 ### async Task&lt;bool&gt; openCashDrawer()
 
@@ -161,6 +168,8 @@ The value of the color is defined in the `MePOSColorCodes` class:
 	public const int LED_AMBER = 3;
 ```
 
+This method is only available for **USB** and **WIFI** instances.
+
 ### async Task&lt;bool&gt; setCosmeticLedCol(int colour)
 
 Sets the cosmetic led indicated with the next available colors in the `MePOSColorCodes` class:
@@ -175,6 +184,8 @@ Sets the cosmetic led indicated with the next available colors in the `MePOSColo
 	public const int COSMETIC_YELLOW = 6;
 	public const int COSMETIC_WHITE = 7;
 ```
+
+This method is only available for **USB** and **WIFI** instances.
 
 ### int print(MePOSReceipt receipt, MePOSPrinterCallback callback)
 
@@ -230,16 +241,13 @@ Gets the MePOSConnectionManager for the current MePOS instance. The connection m
 
 The MePOSConnectionManager can be used to configure the connection settings for the MePOS unit and to configure the Wi-Fi module on a MePOS unit.
 
-### int getConnectionStatus()
-Gets the current connection state of the MePOS unit:
-- -1 = Not initialised
-- 0 = Not connected
-- 1 = Connected via USB
-- 2 = Connected via Wi-Fi
-
 ### void setConnectionIPAddress(string IPAddress)
 
 Sets the IP address on which the connection manager will look for a MePOS unit. The default IP address of the MePOS from the factory is 192.168.16.254, if the tablet is connecting to the MePOS as a client then you will not need to change this parameter unless the network settings on the MePOS unit have been changed.
+
+### void setConnectionPort(int port)
+
+Sets the tcp port on which the connection manager will look for a MePOS or generic EPOS unit. The default port from the factory is **8080**. Note that if you want to connect to a generic EPOS-based printer you might want to change the port number. In most cases the TCP port in EPOS generic syscems is **9100**. Please check this port with your EPOS printer documentation.
 
 ### String getConnectionIPAddress()
 
@@ -251,15 +259,15 @@ Gets the current IP address from the connected MePOS unit. When connected to Wi-
 
 ### bool MePOSConnectDefault()
 
-Sets the MePOS unit to factory settings.
+Sets the MePOS unit to factory settings. This method is only available to **USB** instances.
 
 ### bool MePOSConnectDefault(MePOSConfigurationCallback callback)
 
-Sets the MePOS unit to factory settings. Offers an interface to send notifications of the configuration progress.
+Sets the MePOS unit to factory settings. Offers an interface to send notifications of the configuration progress. This method is only available to **USB** instances.
 
 ### bool MePOSConnectEthernet(String IPAddress, String netmask)
 
-Configure MePOS as Serial Ethernet, with the provided IP address and NetMask. If the IPAddress is equals to `MePOSConnectionManager.IP_AS_DHCP`, the configuration will use the IP provided.
+Configure MePOS as Serial Ethernet, with the provided IP address and NetMask. If the IPAddress is equals to `MePOSConnectionManager.IP_AS_DHCP`, the configuration will use the IP provided. This method is only available to **USB** instances.
 
 ### bool MePOSConnectEthernet(String ipAddress, String netmask, MePOSConfigurationCallback callback)
 
@@ -291,6 +299,8 @@ Encryption – The encryption type of the network you are connecting to, one of 
 Password - The password for the network you are connecting to. This can be left blank or will be ignored if the
 encryption type was set to NONE.
 
+Note that this method is only available to **USB** instances.
+
 ### bool MePOSConnectWiFi(String ssid, String ipAddress, String netmask, String encryption, String password, MePOSConfigurationCallback callback);
 Same as `MePOSConnectWiFi(String ssid, String ipAddress, String netmask, String encryption, String password)` but adds a callback parameter to enable notification of configuration progress.
 
@@ -308,21 +318,23 @@ WEP_OPEN, WPA_TKIP, WPA_AES, WPA2_TKIP, WPA2_AES, WPAWPA2_TKIP, WPAWPA2_AES
 
 Password - The password for the network you are creating. This can be left blank or will be ignored if the encryption type was set to NONE.
 
+Note that this method is only available to **USB** instances.
+
 ### bool MePOSSetAccessPoint(String ssid, String encryption, String password, MePOSConfigurationCallback callback);
 
 Same as `MePOSSetAccessPoint(String SSID, String encryption, String password)` but enables callback for notification progress.
 
 ### Task&lt;String&gt; getMACAddress()
 
-Asks for the MAC address of the MePOS network unit.
+Asks for the MAC address of the MePOS network unit. This method is only available to **USB** instances.
 
 ### Task&lt;String&gt; getSSID();
 
-Returns the SSID the MePOS is broadcasting
+Returns the SSID the MePOS is broadcasting. This method is only available to **USB** instances.
 
 ### Task&lt;String&gt; getRouterFirmware();
 
-Returns the firmware version of the MePOS network unit.
+Returns the firmware version of the MePOS network unit. This method is only available to **USB** and **WIFI** instances.
 
 ## MePOSReceipt
 
@@ -336,17 +348,29 @@ To create a new receipt, use the following code:
 
 After the receipt has been initialised you can add lines to the receipt for printing. There are currently six types of line available to print on a receipt, these are detailed below.
 
-### setCutType(int cutType)
+### void setCutType(int cutType)
 
 Specifies whether to perform a full or partial cut at the end of the receipt where the cut type is:
 
 - `MePOS.CUT_TYPE_FULL`
 - `MePOS.CUT_TYPE_PARTIAL`
 
-Once the receipt has been created you can modify how the printer will cut the receipt after it has finished printing. As a default the printer is set to perform a full receipt cut.
+Once the receipt has been created you can modify how the printer will cut the receipt after it has finished printing. As a default the printer is set to perform a **full receipt cut**.
 
+Note that when configured as `MePOS.CUT_TYPE_PARTIAL` the `feedAfterCut` variable will override to **4** lines to avoid paper jams.
 
-### MePOSReceiptBarcodeLine(int type, String data)
+### void setHeaderFeed(int headerFeed)
+
+Sets the number of lines to feed at the start of the receipt. The default configuration is **0** lines.
+
+### void setFooterFeed(int footerFeed)
+
+Sets the number of lines to feed at the end of the receipt and before doing a paper cut. The default configuration is **12** lines.
+
+### void setFeedAfterCut(int feedLines)
+Sets the number of lines to feed after a paper cut. The default configuration is **0** lines, and **12** lines when overriding **setCutType()** as partial. You can use this method at your will but after configuring first the cut type.
+
+## MePOSReceiptBarcodeLine(int type, String data)
 The barcode line can be used to add a barcode to a receipt. There are currently three supported barcode types, UPC-A, Code 39 and PDF417. They are specified using the following constants:
 
 - `MePOS.BARCODE_TYPE_UPCA`
@@ -360,7 +384,7 @@ The following example shows how to add a barcode to a receipt:
 	r.AddLine(new MePOSReceiptBarcodeLine(MePOS.BARCODE_TYPE_PDF417, "Hello World!");
 ```
 
-### MePOSReceiptFeedLine(int lines)
+## MePOSReceiptFeedLine(int lines)
 The feed line can be used to add whitespace to a receipt. The parameter supplied is the number of lines to feed.
 
 The following example shows how to feed 10 lines on a receipt:
@@ -370,7 +394,7 @@ The following example shows how to feed 10 lines on a receipt:
 	r.AddLine(new MePOSReceiptFeedLine(10);
 ```
 
-### MePOSReceiptImageLine(StorageFile imageFile)
+## MePOSReceiptImageLine(StorageFile imageFile)
 
 The image line can be used to print black and white raster graphics to the printer. The imageFile must be
 a valid Windows.Storage.StorageFile object referencing a Bitmap. See https://docs.microsoft.com/en-us/uwp/api/windows.graphics.imaging.bitmapdecoder for more info.
@@ -382,7 +406,7 @@ The following example shows how to add an image to a receipt:
 	r.AddLine(new MePOSReceiptImageLine(imageFile);
 ```
 
-### MePOSReceiptPriceLine(String leftText, int leftStyle, String rightText, int rightStyle)
+## MePOSReceiptPriceLine(String leftText, int leftStyle, String rightText, int rightStyle)
 
 The price line can be used to add a line to a receipt with text on the left and right simulating the common price item layout of many receipts. The price line takes parameters defining the text on the left and right and also the style of the text. Text styles are discussed later in this document.
 
@@ -393,7 +417,7 @@ The following example shows how to add a price line to a receipt:
 	r.AddLine(new MePOSReceiptPriceLine("Some Item", MePOS.TEXT_STYLE_NONE, "Some Price", MePOS.TEXT_STYLE_NONE);
 ```
 
-### MePOSReceiptSingleCharLine(char chr)
+## MePOSReceiptSingleCharLine(char chr)
 
 The single character line can be used to fill a single line with the same character. The parameter is the character to repeat across the whole line.
 
@@ -418,7 +442,10 @@ The following example shows how to add a text line to a receipt:
 	MePOS.TEXT_POSITION_CENTER);
 ```
 
-## Text style constants
+## Text constants
+If you need to change the text style sized or position you can use and configure the different constants for each receipt line.
+
+### Text style constants
 Some of the printer line commands accept a style parameter. This parameter can be any one of the following constants:
 
 - `MePOS.TEXT_STYLE_NONE`
@@ -431,14 +458,14 @@ Text styles can also be combined using the or operator to achieve a mix of style
 
 - `MePOS.TEXT_STYLE_BOLD | MePOS.TEXT_STYLE_ITALIC`
 
-## Text size constants
+### Text size constants
 
 Some of the printer line commands accept a size constant. This can be one of the following but not both:
 
 - `MePOS.TEXT_SIZE_NORMAL`
 - `MePOS.TEXT_SIZE_WIDE`
 
-## Text position constants
+### Text position constants
 
 Some of the printer line commands accept a position constant. This can be any of the following:
 
