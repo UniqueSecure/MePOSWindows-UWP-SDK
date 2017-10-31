@@ -1,7 +1,10 @@
 MePOS Windows UWP SDK release notes
 ================================
 
-### MePOS 1.1.0 SDK (August 30, 2017)
+### MePOS 1.1.1 SDK (October 31, 2017)
+- Improved stability when printing and opening the cash drawer.
+
+### MePOS 1.1.0 SDK (October 18, 2017)
 - Added support to generic EPOS-based printers.
 - Improved stability when printing and doing I/O changes such as cosmetic, diagnostic or cash drawer changes while printing a receipt.
 - Added: setFeedAfterCut() in the MePOSReceipt class to handle feed lines after a paper cut.

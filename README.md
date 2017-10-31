@@ -1,4 +1,4 @@
-# MePOS Connect windows UWP SDK Guide V1.1.0
+# MePOS Connect windows UWP SDK Guide V1.1.1
 
 The MePOS connect for Windows UWP SDK is designed to allow communication from a tablet or Windows computer to the MePOS host
 unit. SDK libraries are currently available for iOS, Android and .Net Framework.
