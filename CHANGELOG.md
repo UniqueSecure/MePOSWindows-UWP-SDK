@@ -1,6 +1,9 @@
 MePOS Windows UWP SDK release notes
 ================================
 
+### MePOS 1.2.1 SDK (November 11, 2017)
+- Added methods to enable/disable cosmetic LED rotator
+
 ### MePOS 1.1.1 SDK (October 31, 2017)
 - Improved stability when printing and opening the cash drawer.
 
